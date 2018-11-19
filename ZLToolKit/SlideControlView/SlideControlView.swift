@@ -133,19 +133,19 @@ extension SlideControlView: UICollectionViewDelegateFlowLayout {
 extension SlideControlView: SlideContentViewDelegate {
     func willSlide(contentView: SlideContentView, direction: SlideContentView.SlideDirection) {
         if validateSlide(preHighlightedIndex, direction: direction) {
-            if let viewController = contentViewControllers?[getSlideNextIndex(direction)] {
+            if let nextIndex = getSlideNextIndex(direction), let viewController = contentViewControllers?[nextIndex] {
                 contentView.prepareNextSlideView(viewController.view)
             }
         }
     }
     
     func didSlide(contentView: SlideContentView, direction: SlideContentView.SlideDirection) {
-        if validateSlide(preHighlightedIndex, direction: direction) {
-            updateCurrentPage(getSlideNextIndex(direction))
+        if validateSlide(preHighlightedIndex, direction: direction), let nextIndex = getSlideNextIndex(direction) {
+            updateCurrentPage(nextIndex)
         }
     }
     
-    private func getSlideNextIndex(_ direction: SlideContentView.SlideDirection) -> Int {
+    private func getSlideNextIndex(_ direction: SlideContentView.SlideDirection) -> Int? {
         switch direction {
         case .left:
             if preHighlightedIndex > 0 {
@@ -159,6 +159,8 @@ extension SlideControlView: SlideContentViewDelegate {
             } else {
                 return 0
             }
+        case .none:
+            return nil
         }
     }
     

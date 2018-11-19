@@ -18,6 +18,7 @@ class SlideContentView: UIView {
     enum SlideDirection {
         case left
         case right
+        case none
     }
     
     var delegate: SlideContentViewDelegate?
@@ -65,7 +66,10 @@ class SlideContentView: UIView {
     }
     
     func getSlideDirection(_ velocity: CGPoint) -> SlideDirection {
-        return velocity.x > 0 ? .left : .right
+        if abs(velocity.x) > abs(velocity.y) {
+            return velocity.x > 0 ? .left : .right
+        }
+        return .none
     }
     
     func prepareNextSlideView(_ view: UIView) {
